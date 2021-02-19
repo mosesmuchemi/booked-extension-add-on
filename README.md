@@ -1,4 +1,4 @@
-# Project: Embedding Images and Video ([Youtube Clone](https://www.youtube.com/watch?v=V74l_zS1x8E))
+# Project: Booked Extenstion Add-On
 
 An add-on plugin to extend the capabilities of Booked Appointment Plugin for [Influx](https://www.influx.com/) - @influxinc
 * The project is done using PHP, HTML5, CSS3 and JavaScript
