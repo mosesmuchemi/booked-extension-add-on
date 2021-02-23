@@ -12,7 +12,6 @@ Author URI: https://yourcodingmentor.com
 //Enqueue scripts
 function add_plugin_scripts() {
     wp_enqueue_style( 'css-style', plugin_dir_url( __FILE__ ) .'assets/css/css.css' );
-    wp_enqueue_style( 'bootstrap', plugin_dir_url( __FILE__ ) .'assets/bootstrap/css/bootstrap.min.css' );
    
     wp_enqueue_script( 'script', plugin_dir_url( __FILE__ ) .'assets/js/js.js' );
   }
