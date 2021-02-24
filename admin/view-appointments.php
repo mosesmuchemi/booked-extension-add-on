@@ -11,11 +11,15 @@ $paged = ( $_GET['paged'] ) ? $_GET['paged'] : 1;
 $prevpage = max( ($paged - 1), 0 );
 $nextpage = $paged + 1;
 
+$orderdate = $guest_name = get_post_meta( $post->ID,'_appointment_timestamp',false);
+
 $booked_appointments = new WP_Query(array(
     'post_type' =>'booked_appointments',
     'posts_per_page' => 3,
     'paged' => $paged,
     'order' => 'ASC',
+    'meta_key' => '_appointment_timestamp',
+    'orderby' => 'meta_value_num',
     'post_status' => 'publish'
 ));
 
