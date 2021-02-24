@@ -2,6 +2,9 @@
 
 //this function returns an associative array of the custom fields.
 
+//Require booked plugin main file
+require_once plugin_dir_path(__FILE__) .'../../booked/booked.php';
+
 
 function get_booked_custom_fields($user_id = 16 ){
 
@@ -37,3 +40,39 @@ print_r($custom_fields_associative_array['Phone']);
 return $custom_fields_associative_array;
 
 }
+
+
+//hook into the user and admin email notifications
+add_action('booked_send_admin_reminders','send_admin_sms_notifictation');
+add_action('booked_send_user_reminders','send_user_sms_notifictation');
+
+function send_admin_sms_notifictation() { 
+  $post_sms_log = $post_sms_log =  plugin_dir_path(__FILE__) . 'sms-log.txt';
+  $message = ' admin sms notification sent';
+
+  if(file_exists($post_sms_log)) {
+
+    $file = fopen($post_sms_log, 'a');
+    fwrite($file, $message);
+
+  } else {
+    $file = fopen($post_sms_log, 'w');
+    fwrite($file, $message);
+  }
+}
+
+function send_user_sms_notifictation() { 
+  $post_sms_log =  plugin_dir_path(__FILE__) . 'sms-log.txt';
+  $message = ' user sms notification sent';
+
+  if(file_exists($post_sms_log)) {
+
+    $file = fopen($post_sms_log, 'a');
+    fwrite($file, $message);
+
+  } else {
+    $file = fopen($post_sms_log, 'w');
+    fwrite($file, $message);
+  }
+}
+
