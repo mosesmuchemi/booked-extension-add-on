@@ -1,13 +1,9 @@
 
-<div class="container">
-   <div class="row"> 
-      <div class="col-md-12 col-lg-12">
-         <div class="panel">
-            <div class="text-left panel-head">
-               <h3 class="text-tight">All Appointments</h3>
+<div class="apt-container">
+            <div class="apt-panel-head">
+               <h3>All Appointments</h3>
             </div>
-            <div class="panel-body">
-    <div class=" custyle">
+            <div class="apt-panel-body">
     
 <?php 
 
@@ -19,19 +15,25 @@ $booked_appointments = new WP_Query(array(
     'post_type' =>'booked_appointments',
     'posts_per_page' => 3,
     'paged' => $paged,
+    'order' => 'ASC',
     'post_status' => 'publish'
 ));
 
-
+if(!empty($booked_appointments) ):
 ?>
 
-<table class="table table-striped custab">
+<table class="apt-table">
+      <div>
+      <form action="" method="post">        
+        <button class="apt-export-btn">Export to CSV</button>
+      <input type="hidden" name="booked_export_appointments_csv" value="1">
+      </form>
+      </div>
 <thead>
 <tr>
     <th>Person</th>
-    <th>Day</th>
+    <th>Date</th>
     <th>Time</th>
-    <th></th>
  </tr>
 </thead>
 <tr>
@@ -40,13 +42,19 @@ $booked_appointments = new WP_Query(array(
 if ($booked_appointments->have_posts()) :
     while ($booked_appointments->have_posts()) :
         $booked_appointments->the_post();
-        global $post;     
+        global $post;  
+        
+        $time_format = get_option('time_format');
+			  $date_format = get_option('date_format');
 
         $appointment_timestamp = get_post_meta( $post->ID,'_appointment_timestamp',false);
         $appointment_timeslot = get_post_meta( $post->ID,'_appointment_timeslot',false);
 
-        $timestamp = date('d-m-y',$appointment_timestamp['0']);
-        $time = $appointment_timeslot['0'];
+        $timestamp = date($date_format,$appointment_timestamp['0']);
+
+        $time_slot = explode('-',$appointment_timeslot['0']);
+        $time_start = date($time_format, strtotime($time_slot['0']));
+				$time_end = date($time_format, strtotime($time_slot['1']));
 
         $guest_name = get_post_meta( $post->ID,'_appointment_guest_name',true);
         $registered_user_id = get_post_meta( $post->ID,'_appointment_user',true);
@@ -61,29 +69,15 @@ if ($booked_appointments->have_posts()) :
             echo '<td>'.$registered_user->user_login.'</td>';
         }
         echo '<td>'.$timestamp.'</td>';
-        echo '<td>'.$time.'</td>';
-        echo '<td class="text-right"><a class=\'btn btn-info btn-xs\' href="#"><span class="glyphicon glyphicon-edit"></span> Change</a> <a href="'.$post->ID.'" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-remove"></span>Remove</a></td>';
-       /* echo '<td class="apt-buttons">';
-        echo '<form type="post" action="<?php echo admin_url(admin-ajax.php); ?>">';
-        echo '<input type="hidden" id="ajaxchange_id" name="ajaxchange_id" value ="'.$post->ID.'">';
-        echo '<input type="button" id="change" value ="Change">';
-        echo '</form>';
-        echo '<form type="post">';
-        echo '<input type="hidden" id="ajaxcancel_id" name="ajaxcancel_id" value ="ajaxtestdel">';
-        echo '<input type="button" id="cancel" value ="Cancel">';
-        echo '</form>';
-        echo '</td>'; */
+        echo '<td>'.$time_start.'-'.$time_end.'</td>';
         echo '</tr>';
        
-        
-
         endwhile;
         endif;
 
-
 ?>
   
-
+<!-- Appointment table pagination -->
 </table>
 <nav aria-label="Page navigation">
   <ul class="pagination">
@@ -106,49 +100,12 @@ if ($booked_appointments->have_posts()) :
  <?php } ?>
   </ul>
 </nav>
-    </div>
+<?php else: ?>
+<div class="no-apt">
+ <h3>There are no appointments</h3>
 </div>
+<?php endif; ?>
+  </div>
 </div>
-
-<?php
-
-function testdel( $post ) { // note the $post varaible as argument
-    wp_nonce_field('testdel', 'ajaxsecurity'); // is a good practise adding nonces
-
-}
-
-function ajaxtestdel() {
-    $postid = isset($_POST['cancel']) ? $_POST['cancel'] : '';
-    $nonce = isset($_POST['ajaxcancel_id']) ? $_POST['ajaxcancel_id'] : '';
-    if ( $postid && $nonce && wp_verify_nonce($nonce, 'testdel') ) {
-      $status = delete_post_meta($postid, '_appointment_guest_name') ? 'Error' : 'Success';
-    } else {
-       $status = 'Error';
-    }
-    die($status);
-  }
-  
-  add_action('wp_ajax_ajaxtestdel', 'ajaxtestdel');
-
-?>
-
-<script>
-jQuery('#cancel').on('click', function(){
-    var $this = jQuery(this);
-    var post = jQuery('#ajaxcancel_id').val(); // get post id from hidded field
-    var nonce = jQuery('input[name="ajaxcancel_id"]').val(); // get nonce from hidden field
-    jQuery.ajax({
-      url: '/wp-admin/admin-ajax.php', // in backend you should pass the ajax url using this variable
-      type: 'POST',
-      data: { action : 'ajaxtestdel', 
-      postid: post, 
-      ajaxsecurity: nonce },
-      success: function(data){
-        console.log(data);
-        $this.val('deleted');
-      }
-    });
-  });
-</script>
 
 
