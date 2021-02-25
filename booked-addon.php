@@ -9,6 +9,15 @@ Author: Moses Migwi
 Author URI: https://yourcodingmentor.com
 */
 
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly.
+}
+
+//check if Booked plugin is active
+if ( ! in_array( 'booked/booked.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) 
+return;
+
 //Enqueue scripts
 function add_plugin_scripts() {
     wp_enqueue_style( 'css-style', plugin_dir_url( __FILE__ ) .'assets/css/css.css' );
