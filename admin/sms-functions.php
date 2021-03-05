@@ -3,6 +3,9 @@
 //require mailer functions to hook the sms notifications into
 require_once plugin_dir_path(__FILE__) .'../../booked/includes/mailer_functions.php';
 
+//require mailer functions to hook the sms notifications into
+require_once plugin_dir_path(__FILE__) .'../../booked/booked.php';
+
 
 //this function fetches the phone field based on user_id
 function get_booked_custom_fields($user_id = 16 ){

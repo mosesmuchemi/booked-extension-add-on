@@ -1,7 +1,7 @@
 <?php
 
 /*
-Plugin Name: Booked Plugin Addon
+Plugin Name: Booked Extension Add-on
 Plugin URI: https://yourcodingmentor.com
 Description: This plugin tests data access to Booked plugin fields..
 Version: 1.0.0
