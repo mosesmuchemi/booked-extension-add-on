@@ -11,16 +11,14 @@ $paged = ( $_GET['paged'] ) ? $_GET['paged'] : 1;
 $prevpage = max( ($paged - 1), 0 );
 $nextpage = $paged + 1;
 
-$orderdate = $guest_name = get_post_meta( $post->ID,'_appointment_timestamp',false);
 
 $booked_appointments = new WP_Query(array(
     'post_type' =>'booked_appointments',
-    'posts_per_page' => 3,
+    'posts_per_page' => 10,
     'paged' => $paged,
     'order' => 'ASC',
     'meta_key' => '_appointment_timestamp',
-    'orderby' => 'meta_value_num',
-    'post_status' => 'publish'
+    'orderby' => 'meta_value_num'
 ));
 
 if(!empty($booked_appointments) ):
@@ -30,7 +28,7 @@ if(!empty($booked_appointments) ):
       <div>
       <form action="" method="post">        
         <button class="apt-export-btn">Export to CSV</button>
-      <input type="hidden" name="booked_export_appointments_csv" value="1">
+      <input type="hidden" name="booked_addon_csv" value="1">
       </form>
       </div>
 <thead>
@@ -38,6 +36,7 @@ if(!empty($booked_appointments) ):
     <th>Person</th>
     <th>Date</th>
     <th>Time</th>
+    <th>Status</th>
  </tr>
 </thead>
 <tr>
@@ -60,25 +59,40 @@ if ($booked_appointments->have_posts()) :
         $time_start = date($time_format, strtotime($time_slot['0']));
 				$time_end = date($time_format, strtotime($time_slot['1']));
 
-        $guest_name = get_post_meta( $post->ID,'_appointment_guest_name',true);
         $registered_user_id = get_post_meta( $post->ID,'_appointment_user',true);
-        if($registered_user_id){
-            $registered_user = get_userdata($registered_user_id);
+        $registered_user = get_userdata($registered_user_id);
+        $first_name = get_user_meta($registered_user->ID, 'first_name', true);
+        $last_name = get_user_meta($registered_user->ID, 'last_name', true);
+        $guest_name = get_post_meta( $post->ID,'_appointment_guest_name',true);
+        $guest_surname = get_post_meta( $post->ID,'_appointment_guest_surname',true);
 
-        }
 
-        if($guest_name){
-            echo '<td>'.$guest_name.'</td>';
-        }else{
+        if(!$guest_name):
+          if($first_name || $last_name):
+              echo '<td>'.$first_name. ' ' .$last_name.'</td>';
+          elseif($registered_user->display_name):
+            echo '<td>'.$registered_user->display_name.'</td>';
+          else:
             echo '<td>'.$registered_user->user_login.'</td>';
-        }
+          endif;
+          
+        else:
+          echo '<td>'.$guest_name.' '.$guest_surname.'</td>';
+        endif;
+          
+        
         echo '<td>'.$timestamp.'</td>';
         echo '<td>'.$time_start.'-'.$time_end.'</td>';
+        if($post->post_status=='publish'):
+        echo '<td>Approved</td>';
+        else:
+        echo '<td>Pending</td>';
+        endif;
         echo '</tr>';
        
         endwhile;
         endif;
-
+        
 ?>
   
 <!-- Appointment table pagination -->
