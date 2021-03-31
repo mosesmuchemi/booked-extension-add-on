@@ -4,8 +4,9 @@
             </div>
             <div class="apt-panel-body">
              <div id="disable-sms">
-               
+
              <form action="options.php" method="post">
+             <p>Enable or disable sms notifications</p>
              <?php settings_fields( 'sms_options_group' ); ?>
              <?php
                

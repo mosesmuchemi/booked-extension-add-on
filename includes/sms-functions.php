@@ -23,19 +23,21 @@ $options_value = get_option( 'sms_control' );
         $customer_phone = get_user_meta($user_id->ID, 'booked_phone', true);
         
         //Get post ID
-        $booked_appointment = array(
+        $booked_appointments = array(
             'post_type' =>'booked_appointments',
-            'post_status' => 'publish'
+            'post_status' => 'any',
+            'orderby' => 'ID'
            );
 
-        $get_post = get_posts($booked_appointment);
-        $post_id = $get_post['0']->ID;
+         $get_post = get_posts($booked_appointments);
+         $post_id = $get_post['0']->ID;
+
 
         //Name
         $name = $user_id->display_name;
         //Date
         $timestamp = get_post_meta($post_id,'_appointment_timestamp', true);
-	    $date = date( $date_format,$timestamp);
+	    $date = date($date_format,$timestamp);
         //Time
         $appointment_timeslot = get_post_meta( $post_id, '_appointment_timeslot', true);
         $time_slot = explode('-',$appointment_timeslot);
@@ -75,22 +77,17 @@ $options_value = get_option( 'sms_control' );
         //Get customer phone on profile
         $user_id = wp_get_current_user();
         $customer_phone = get_user_meta($user_id->ID, 'booked_phone', true);
+
         //Get post ID
-        $booked_appointment = array(
-        'post_type' =>'booked_appointments',
-        'post_status' => 'draft'
-        );
-
-        $get_post = get_posts($booked_appointment);
-        $post_id = $get_post['0']->ID;
-
+        $appt_id = $_POST['appt_id'];
+        
         //Name
         $name = $user_id->display_name;
         //Date
-        $timestamp = get_post_meta($post_id,'_appointment_timestamp', true);
+        $timestamp = get_post_meta($appt_id,'_appointment_timestamp', true);
 	    $date = date( $date_format,$timestamp);
         //Time
-        $appointment_timeslot = get_post_meta( $post_id, '_appointment_timeslot', true);
+        $appointment_timeslot = get_post_meta($appt_id, '_appointment_timeslot', true);
         $time_slot = explode('-',$appointment_timeslot);
         $time = date($time_format, strtotime($time_slot['0']));
 
@@ -131,21 +128,15 @@ $options_value = get_option( 'sms_control' );
         $customer_phone = get_user_meta($user_id->ID, 'booked_phone', true);
 
         //Get post ID
-        $booked_appointment = array(
-        'post_type' =>'booked_appointments',
-        'post_status' => 'draft'
-        );
-
-        $get_post = get_posts($booked_appointment);
-        $post_id = $get_post['0']->ID;
+        $appt_id = $_POST['appt_id'];
 
         //Name
         $name = $user_id->display_name;
         //Date
-        $timestamp = get_post_meta($post_id,'_appointment_timestamp', true);
+        $timestamp = get_post_meta($appt_id,'_appointment_timestamp', true);
 	    $date = date( $date_format,$timestamp);
         //Time
-        $appointment_timeslot = get_post_meta( $post_id, '_appointment_timeslot', true);
+        $appointment_timeslot = get_post_meta($appt_id, '_appointment_timeslot', true);
         $time_slot = explode('-',$appointment_timeslot);
         $time = date($time_format, strtotime($time_slot['0']));
 
