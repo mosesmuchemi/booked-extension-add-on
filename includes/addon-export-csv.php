@@ -24,11 +24,11 @@ fputcsv( $output, $export_titles );
 
 
 $booked_appointments = new WP_Query(array(
-    'post_type' =>'booked_appointments',
+    'post_type'      =>'booked_appointments',
     'posts_per_page' => 500,
-    'order' => 'ASC',
-    'meta_key' => '_appointment_timestamp',
-    'orderby' => 'meta_value_num'
+    'order'          => 'ASC',
+    'meta_key'       => '_appointment_timestamp',
+    'orderby'        => 'meta_value_num'
  ));
 
  if(!empty($booked_appointments) ):
@@ -52,11 +52,13 @@ if ($booked_appointments->have_posts()) :
 
     $registered_user_id = get_post_meta( $post->ID,'_appointment_user',true);
     $registered_user = get_userdata($registered_user_id);
+    if($registered_user):
     $first_name = get_user_meta($registered_user->ID, 'first_name', true);
     $last_name = get_user_meta($registered_user->ID, 'last_name', true);
+    $registered_user_email = $registered_user->user_email;
+    endif;
     $guest_name = get_post_meta( $post->ID,'_appointment_guest_name',true);
     $guest_surname = get_post_meta( $post->ID,'_appointment_guest_surname',true);
-    $registered_user_email = $registered_user->user_email;
     $guest_email = get_post_meta($post->ID, '_appointment_guest_email',true);
 
 
@@ -112,6 +114,16 @@ if (isset($_POST['from_date']) && isset($_POST['to_date'])):
         )
      );
 
+     if ($_POST['calendar_id']):
+        $args['tax_query'] = array(
+            array(
+                'taxonomy' => 'booked_custom_calendars',
+                'field'    => 'term_id',
+                'terms'    => $_POST['calendar_id'],
+            )
+        );
+    endif;
+
 
     header('Content-Type: text/csv; charset=utf-8');
     header('Content-Disposition: attachment; filename=filtered_appointments_export.csv');
@@ -131,13 +143,21 @@ if (isset($_POST['from_date']) && isset($_POST['to_date'])):
 
 
     $booked_appointments = new WP_Query(array(
-        'post_type' => 'booked_appointments',
-        'post_status' => $_POST['appointment_type'],
+        'post_type'      => 'booked_appointments',
+        'post_status'    => $_POST['appointment_type'],
         'posts_per_page' => 500,
-        'meta_key'   => '_appointment_timestamp',
-        'orderby'    => 'meta_value_num',
-        'order'      => 'ASC',
-        'meta_query' => $meta_query
+        'meta_key'       => '_appointment_timestamp',
+        'orderby'        => 'meta_value_num',
+        'order'          => 'ASC',
+        'meta_query'     => $meta_query,
+        'tax_query'      => array(
+            'relation'   => 'AND',
+                            array(
+                            'taxonomy' => 'booked_custom_calendars',
+                            'field'    => 'term_id',
+                            'terms'    => $_POST['calendar_id'],
+                        )
+        )
     ));
 
 
@@ -161,13 +181,15 @@ if (isset($_POST['from_date']) && isset($_POST['to_date'])):
 
         $registered_user_id = get_post_meta( $post->ID,'_appointment_user',true);
         $registered_user = get_userdata($registered_user_id);
+        if($registered_user):
         $display_name = $registered_user->display_name;
         $user_login = $registered_user->user_login;
         $first_name = get_user_meta($registered_user->ID, 'first_name', true);
         $last_name = get_user_meta($registered_user->ID, 'last_name', true);
+        $registered_user_email = $registered_user->user_email;
+        endif;
         $guest_name = get_post_meta( $post->ID,'_appointment_guest_name',true);
         $guest_surname = get_post_meta( $post->ID,'_appointment_guest_surname',true);
-        $registered_user_email = $registered_user->user_email;
         $guest_email = get_post_meta($post->ID, '_appointment_guest_email',true);
 
         if($post->post_status=='publish'):

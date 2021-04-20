@@ -6,7 +6,7 @@ require __DIR__ . '/../vendor/autoload.php';
 use Twilio\Rest\Client;
 
 //Get otions enable/disable value
-$options_value = get_option( 'sms_control' );
+$options_value = get_option('sms_control');
  //Check if send SMS option is enabled
  if($options_value=='enable'): 
 
@@ -24,9 +24,9 @@ $options_value = get_option( 'sms_control' );
         
         //Get post ID
         $booked_appointments = array(
-            'post_type' =>'booked_appointments',
+            'post_type'   =>'booked_appointments',
             'post_status' => 'any',
-            'orderby' => 'ID'
+            'orderby'     => 'ID'
            );
 
          $get_post = get_posts($booked_appointments);
@@ -50,21 +50,15 @@ $options_value = get_option( 'sms_control' );
         $replace = array($name,$date,$time);
         $message = str_replace($filter, $replace, $sms_content);
 
-        // Your Account SID and Auth Token from twilio.com/console
-        $sid = get_option('account_sid');
-        $token = get_option('auth_token');
-        $client = new Client($sid, $token);
-        // Use the client to do fun stuff like send text messages!
-        $client->messages->create(
-            // the number you'd like to send the message to
-            $customer_phone,
-            [
-                // A Twilio phone number you purchased at twilio.com/console
-                'from' => '+18165422676',
-                // the body of the text message you'd like to send
-                'body' => $message
-            ]
-        );
+        //Your Application SID and Application Token from Bulkgate
+        $application_id = get_option('application_id');
+        $application_token = get_option('application_token');
+        //Use the client to do fun stuff like send text messages!
+        $connection = new BulkGate\Message\Connection($application_id, $application_token);
+        $sender = new BulkGate\Sms\Sender($connection);
+        $send = new BulkGate\Sms\Message($customer_phone, $message);
+        $sender->send($send);
+        
     }
 
     // Send booked appointment approved message
@@ -97,24 +91,17 @@ $options_value = get_option( 'sms_control' );
         $replace = array($name,$date,$time);
         $message = str_replace($filter, $replace, $sms_content);
 
-        // Your Account SID and Auth Token from twilio.com/console
-        $sid = get_option('account_sid');
-        $token = get_option('auth_token');
-        $client = new Client($sid, $token);
-        // Use the client to do fun stuff like send text messages!
-        $client->messages->create(
-            // the number you'd like to send the message to
-            $customer_phone,
-            [
-                // A Twilio phone number you purchased at twilio.com/console
-                'from' => '+18165422676',
-                // the body of the text message you'd like to send
-                'body' => $message
-            ]
-        );
+       //Your Application SID and Application Token from Bulkgate
+       $application_id = get_option('application_id');
+       $application_token = get_option('application_token');
+       //Use the client to do fun stuff like send text messages!
+       $connection = new BulkGate\Message\Connection($application_id, $application_token);
+       $sender = new BulkGate\Sms\Sender($connection);
+       $send = new BulkGate\Sms\Message($customer_phone, $message);
+       $sender->send($send);
     }
 
-    // Send cancelation message
+    //Send cancelation message
     add_action('booked_appointment_cancelled', 'appointment_cancelled_sms');
 
     function appointment_cancelled_sms(){
@@ -145,21 +132,16 @@ $options_value = get_option( 'sms_control' );
         $filter = array('%name%','%date%','%time%');
         $replace = array($name,$date,$time);
         $message = str_replace($filter, $replace, $sms_content);
-        // Your Account SID and Auth Token from twilio.com/console
-        $sid = get_option('account_sid');
-        $token = get_option('auth_token');
-        $client = new Client($sid, $token);
-        // Use the client to do fun stuff like send text messages!
-        $client->messages->create(
-            // the number you'd like to send the message to
-            $customer_phone,
-            [
-                // A Twilio phone number you purchased at twilio.com/console
-                'from' => '+18165422676',
-                // the body of the text message you'd like to send
-                'body' => $message
-            ]
-        );
+        
+        //Your Application SID and Application Token from Bulkgate
+        $application_id = get_option('application_id');
+        $application_token = get_option('application_token');
+
+        //Use the client to do fun stuff like send text messages!
+        $connection = new BulkGate\Message\Connection($application_id, $application_token);
+        $sender = new BulkGate\Sms\Sender($connection);
+        $send = new BulkGate\Sms\Message($customer_phone, $message);
+        $sender->send($send);
     }
 
 endif;

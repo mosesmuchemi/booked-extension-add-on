@@ -8,57 +8,46 @@
              <form action="options.php" method="post">
              <p>Enable or disable sms notifications</p>
              <?php settings_fields( 'sms_options_group' ); ?>
-             <?php
-               
+             <?php          
 
              // Get the value of this option.
              $options_value = get_option( 'sms_control' );            
             ?>
             <br>
             <b><label for="">Enabled</label></b>
-            <input type="radio" name="sms_control" value="enable" id="<?php $options_value ?>"
+            <input type="radio" name="sms_control" value="enable" class="show_sms_fields" id="<?php $options_value ?>"
             <?php checked( $options_value, 'enable' ); ?> />
             <b><label for="">Disabled</label></b>
-             <input type="radio" name="sms_control" value="disable" id="<?php $options_value ?>"
+             <input type="radio" name="sms_control" value="disable" class="hide_sms_fields" id="<?php $options_value ?>"
              <?php checked( $options_value, 'disable' ); ?>/>
              <br><br>
             <div class="sms-fieds">
-            <table>
+        
           <?php if($options_value=='enable'): ?>
-          <tr>
-          <th>
-          <label for="">Account SID</label>
-          </th>
-           <td>
-              <input type="text" name="account_sid" value="<?php echo get_option('account_sid'); ?>"><br>
-          </td>
-          </tr>
-          <tr>
           
-          <th>
-          <label for="">Auth Token </label>
-          </th>
-          <td>
-              <input type="text" name="auth_token" value="<?php echo get_option('auth_token'); ?>"><br>
-          </td>
-          </tr>
-         <?php endif;?>
-          </table>
-            </div>
-            
-          
+          <div class="sms_fields">
+            <p>Make sure you have the details below filled for the SMS fuctionality to work. You can get them from <a target="_blank" href="https://www.bulkgate.com/">Bulkgate</a> </p>
 
-             
-               <?php 
-               
+            <b><label for="">Application ID</label></b><br>
+            <input type="text" name="application_id" value="<?php echo get_option('application_id'); ?>"><br><br>
+
+            <b><label for="">Application Token </label></b><br>
+            <input type="text" name="application_token" value="<?php echo get_option('application_token'); ?>"><br><br>
+            
+
+
+          </div>      
+
+         <?php endif;?>
+          
+            </div>
+                 
+               <?php          
                submit_button();
-               
                ?>
 
              </form>
              
-             
-
             
              </div> 
             </div>

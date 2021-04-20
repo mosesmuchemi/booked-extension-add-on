@@ -101,14 +101,16 @@ endif;
 add_action( 'admin_init', 'addonsms_register_settings' );
 
 function addonsms_register_settings() {
-    $sms_enable = $_POST['sms_control'] ;
-    $sid = $_POST['account_sid'];
-    $auth = $_POST['auth_token'];
+    $sms_enable = isset($_POST['sms_control']) ? $_POST['sms_control'] : "";
+    $application_token = isset($_POST['application_id']) ? $_POST['application_id'] : "";
+    $auth = isset($_POST['application_token']) ? $_POST['application_token'] : "";
     
     add_option('sms_control',$sms_enable);
-    add_option('account_sid',$sid);
-    add_option('auth_token',$auth);
+    add_option('application_id',$application_token);
+    add_option('application_token',$auth);
+
     register_setting( 'sms_options_group', 'sms_control', 'myplugin_callback' );
-    register_setting( 'sms_options_group', 'account_sid', 'myplugin_callback' );
-    register_setting( 'sms_options_group', 'auth_token', 'myplugin_callback' );
+    register_setting( 'sms_options_group', 'application_id', 'myplugin_callback' );
+    register_setting( 'sms_options_group', 'application_token', 'myplugin_callback' );
+
  }

@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit5e15c236868628b1f9f0ca7cd8307d1b
+class ComposerStaticInit1971ae12feb38614265a861ec40b8192
 {
     public static $prefixLengthsPsr4 = array (
         'T' => 
@@ -21,15 +21,57 @@ class ComposerStaticInit5e15c236868628b1f9f0ca7cd8307d1b
     );
 
     public static $classMap = array (
+        'BulkGate\\Exception' => __DIR__ . '/..' . '/bulkgate/utils/src/Utils/exceptions.php',
+        'BulkGate\\Message\\Bridges\\MessageDI\\MessageExtension' => __DIR__ . '/..' . '/bulkgate/message/src/Bridges/MessageDI/MessageExtension.php',
+        'BulkGate\\Message\\Bridges\\MessageTracy\\MessagePanel' => __DIR__ . '/..' . '/bulkgate/message/src/Bridges/MessageTracy/MessagePanel.php',
+        'BulkGate\\Message\\Connection' => __DIR__ . '/..' . '/bulkgate/message/src/Message/Connection.php',
+        'BulkGate\\Message\\ConnectionException' => __DIR__ . '/..' . '/bulkgate/message/src/Message/exceptions.php',
+        'BulkGate\\Message\\HttpHeaders' => __DIR__ . '/..' . '/bulkgate/message/src/Message/HttpHeaders.php',
+        'BulkGate\\Message\\IConnection' => __DIR__ . '/..' . '/bulkgate/message/src/Message/IConnection.php',
+        'BulkGate\\Message\\IMessage' => __DIR__ . '/..' . '/bulkgate/message/src/Message/IMessage.php',
+        'BulkGate\\Message\\InvalidContentTypeException' => __DIR__ . '/..' . '/bulkgate/message/src/Message/exceptions.php',
+        'BulkGate\\Message\\InvalidRequestException' => __DIR__ . '/..' . '/bulkgate/message/src/Message/exceptions.php',
+        'BulkGate\\Message\\InvalidStateException' => __DIR__ . '/..' . '/bulkgate/message/src/Message/exceptions.php',
+        'BulkGate\\Message\\MalformedJsonException' => __DIR__ . '/..' . '/bulkgate/message/src/Message/exceptions.php',
+        'BulkGate\\Message\\Request' => __DIR__ . '/..' . '/bulkgate/message/src/Message/Request.php',
+        'BulkGate\\Message\\Response' => __DIR__ . '/..' . '/bulkgate/message/src/Message/Response.php',
+        'BulkGate\\Message\\Scheduler' => __DIR__ . '/..' . '/bulkgate/message/src/Message/Scheduler.php',
+        'BulkGate\\Sms\\BulkMessage' => __DIR__ . '/..' . '/bulkgate/sms/src/Sms/BulkMessage.php',
+        'BulkGate\\Sms\\Country' => __DIR__ . '/..' . '/bulkgate/sms/src/Sms/Country.php',
+        'BulkGate\\Sms\\ISender' => __DIR__ . '/..' . '/bulkgate/sms/src/Sms/ISender.php',
+        'BulkGate\\Sms\\InvalidIsoCodeException' => __DIR__ . '/..' . '/bulkgate/sms/src/Sms/exceptions.php',
+        'BulkGate\\Sms\\InvalidMessageException' => __DIR__ . '/..' . '/bulkgate/sms/src/Sms/exceptions.php',
+        'BulkGate\\Sms\\InvalidPhoneNumbersException' => __DIR__ . '/..' . '/bulkgate/sms/src/Sms/exceptions.php',
+        'BulkGate\\Sms\\Message' => __DIR__ . '/..' . '/bulkgate/sms/src/Sms/Message.php',
+        'BulkGate\\Sms\\Message\\InvalidPhoneNumberException' => __DIR__ . '/..' . '/bulkgate/sms/src/Sms/Message/exceptions.php',
+        'BulkGate\\Sms\\Message\\PhoneNumber' => __DIR__ . '/..' . '/bulkgate/sms/src/Sms/Message/PhoneNumber.php',
+        'BulkGate\\Sms\\Message\\Text' => __DIR__ . '/..' . '/bulkgate/sms/src/Sms/Message/Text.php',
+        'BulkGate\\Sms\\Sender' => __DIR__ . '/..' . '/bulkgate/sms/src/Sms/Sender.php',
+        'BulkGate\\Sms\\SenderSettings\\CountrySenderID' => __DIR__ . '/..' . '/bulkgate/sms/src/Sms/SenderSettings/CountrySenderID.php',
+        'BulkGate\\Sms\\SenderSettings\\CountrySenderSettings' => __DIR__ . '/..' . '/bulkgate/sms/src/Sms/SenderSettings/CountrySenderSettings.php',
+        'BulkGate\\Sms\\SenderSettings\\Gate' => __DIR__ . '/..' . '/bulkgate/sms/src/Sms/SenderSettings/Gate.php',
+        'BulkGate\\Sms\\SenderSettings\\ISenderSettings' => __DIR__ . '/..' . '/bulkgate/sms/src/Sms/SenderSettings/ISenderSettings.php',
+        'BulkGate\\Sms\\SenderSettings\\InvalidGateException' => __DIR__ . '/..' . '/bulkgate/sms/src/Sms/SenderSettings/exceptions.php',
+        'BulkGate\\Sms\\SenderSettings\\InvalidSenderException' => __DIR__ . '/..' . '/bulkgate/sms/src/Sms/SenderSettings/exceptions.php',
+        'BulkGate\\Sms\\SenderSettings\\StaticSenderSettings' => __DIR__ . '/..' . '/bulkgate/sms/src/Sms/SenderSettings/StaticSenderSettings.php',
+        'BulkGate\\Sms\\SmsException' => __DIR__ . '/..' . '/bulkgate/sms/src/Sms/exceptions.php',
+        'BulkGate\\Strict' => __DIR__ . '/..' . '/bulkgate/utils/src/Utils/Strict.php',
+        'BulkGate\\StrictException' => __DIR__ . '/..' . '/bulkgate/utils/src/Utils/exceptions.php',
+        'BulkGate\\Utils\\Compress' => __DIR__ . '/..' . '/bulkgate/utils/src/Utils/Compress.php',
+        'BulkGate\\Utils\\ExtensionException' => __DIR__ . '/..' . '/bulkgate/utils/src/Utils/exceptions.php',
+        'BulkGate\\Utils\\Iterator' => __DIR__ . '/..' . '/bulkgate/utils/src/Utils/Iterator.php',
+        'BulkGate\\Utils\\Json' => __DIR__ . '/..' . '/bulkgate/utils/src/Utils/Json.php',
+        'BulkGate\\Utils\\JsonException' => __DIR__ . '/..' . '/bulkgate/utils/src/Utils/exceptions.php',
+        'BulkGate\\Utils\\Locale' => __DIR__ . '/..' . '/bulkgate/utils/src/Utils/Locale.php',
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit5e15c236868628b1f9f0ca7cd8307d1b::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit5e15c236868628b1f9f0ca7cd8307d1b::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit5e15c236868628b1f9f0ca7cd8307d1b::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit1971ae12feb38614265a861ec40b8192::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit1971ae12feb38614265a861ec40b8192::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit1971ae12feb38614265a861ec40b8192::$classMap;
 
         }, null, ClassLoader::class);
     }

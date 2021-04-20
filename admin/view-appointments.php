@@ -7,18 +7,18 @@
     
       <?php 
 
-      $paged = ( $_GET['paged'] ) ? $_GET['paged'] : 1; 
+      $paged = isset( $_GET['paged'] ) ? $_GET['paged'] : 1; 
       $prevpage = max( ($paged - 1), 0 );
       $nextpage = $paged + 1;
 
 
       $booked_appointments = new WP_Query(array(
-          'post_type' =>'booked_appointments',
+          'post_type'      =>'booked_appointments',
           'posts_per_page' => 10,
-          'paged' => $paged,
-          'order' => 'ASC',
-          'meta_key' => '_appointment_timestamp',
-          'orderby' => 'meta_value_num'
+          'paged'          => $paged,
+          'order'          => 'ASC',
+          'meta_key'       => '_appointment_timestamp',
+          'orderby'        => 'meta_value_num'
       ));
 
       if(!empty($booked_appointments) ):
@@ -61,10 +61,13 @@
 
               $registered_user_id = get_post_meta( $post->ID,'_appointment_user',true);
               $registered_user = get_userdata($registered_user_id);
+              if($registered_user):
               $first_name = get_user_meta($registered_user->ID, 'first_name', true);
               $last_name = get_user_meta($registered_user->ID, 'last_name', true);
+              endif;
               $guest_name = get_post_meta( $post->ID,'_appointment_guest_name',true);
               $guest_surname = get_post_meta( $post->ID,'_appointment_guest_surname',true);
+
 
 
               if(!$guest_name):

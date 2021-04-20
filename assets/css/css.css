@@ -92,3 +92,6 @@
 .export-container {
   margin: 40px;
 }
+.export-container select {
+  width: 180px;
+}
