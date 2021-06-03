@@ -21,7 +21,7 @@
           'orderby'        => 'meta_value_num'
       ));
 
-      if(!empty($booked_appointments) ):
+      if(!empty($booked_appointments->have_posts()) ):
       ?>
 
       <table class="apt-table">

@@ -31,7 +31,6 @@ function add_plugin_scripts() {
 
 //Require booked plugin main file
 require_once plugin_dir_path(__FILE__) .'../booked/booked.php';
-// Require booked addon SMS functions
 require_once plugin_dir_path(__FILE__) .'includes/sms-functions.php';
 
 
@@ -97,6 +96,16 @@ if (isset($_POST['booked_addon_csv']) || isset($_POST['from_date']) && isset($_P
     include('includes/addon-export-csv.php');
 endif;
 }
+
+// // Require booked addon SMS functions
+// add_action( 'admin_init','sms_file');
+
+// function sms_file(){
+// if ( isset( $_POST['application_id'] ) && isset( $_POST['application_token'] ) ):
+//     include('includes/sms-functions.php');
+// endif;
+// }
+
 
 add_action( 'admin_init', 'addonsms_register_settings' );
 
