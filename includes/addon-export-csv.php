@@ -114,18 +114,11 @@ if (isset($_POST['from_date']) && isset($_POST['to_date'])):
         )
      );
 
-     $args = array(
-        'post_type'      => 'booked_appointments',
-        'post_status'    => $_POST['appointment_type'],
-        'posts_per_page' => -1,
-        'meta_key'       => '_appointment_timestamp',
-        'orderby'        => 'meta_value_num',
-        'order'          => 'ASC',
-        'meta_query'     => $meta_query
-     );
+     if ( isset( $_POST['calendar_id'] ) && $_POST['calendar_id'] =='all' ):
+        $tax_query = array();
 
-     if ( isset( $_POST['calendar_id'] ) ):
-        $args['tax_query'] = array(
+    else:
+        $tax_query = array(
             array(
                 'taxonomy' => 'booked_custom_calendars',
                 'field'    => 'term_id',
@@ -133,6 +126,18 @@ if (isset($_POST['from_date']) && isset($_POST['to_date'])):
             )
         );
     endif;
+
+     $args = array(
+        'post_type'      => 'booked_appointments',
+        'post_status'    => $_POST['appointment_type'],
+        'posts_per_page' => -1,
+        'meta_key'       => '_appointment_timestamp',
+        'orderby'        => 'meta_value_num',
+        'order'          => 'ASC',
+        'meta_query'     => $meta_query,
+        'tax_query'     => $tax_query
+     );
+
 
 
     header('Content-Type: text/csv; charset=utf-8');
