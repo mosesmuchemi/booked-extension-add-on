@@ -16,86 +16,117 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly.
 if ( ! in_array( 'booked/booked.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) 
 return;
 
-//Enqueue scripts
-function add_plugin_scripts() {
-    wp_enqueue_style( 'css-style', plugin_dir_url( __FILE__ ) .'assets/css/css.css' );
-   
-    wp_enqueue_script( 'script', plugin_dir_url( __FILE__ ) .'assets/js/js.js' );
-
-    wp_enqueue_script('jquery-ui-datepicker');
-    
-    wp_enqueue_style('jquery-style', 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/smoothness/jquery-ui.css');
-
-  }
-  add_action( 'admin_enqueue_scripts', 'add_plugin_scripts' );
-
 //Require booked plugin main file
 require_once plugin_dir_path(__FILE__) .'../booked/booked.php';
 require_once plugin_dir_path(__FILE__) .'includes/sms-functions.php';
 
 
-add_action( 'admin_menu', 'booked_addon_topmenu' );
+if(!class_exists('booked_addon_extension')) {
+	class booked_addon_extension {
 
-function booked_addon_topmenu() {
+        public function __construct() {
 
-    //Top menu
-    // add_menu_page(
-    //     'Booked AddOn',
-    //     'Booked AddOn',
-    //     'manage_options',
-    //     'addon_top_menu',
-    //     'top_menu_callback'
-    // );
+            add_action( 'admin_menu', array( $this,'booked_addon_topmenu' ) );
 
+            add_action( 'admin_enqueue_scripts', array( $this, 'add_plugin_scripts' ) );
 
-    add_submenu_page(
-        'booked-appointments',
-        'All Appointments',
-        'All Appointments',
-        'manage_options',
-        'all-appointments',
-        'all_appointments'
-    );
+            add_action( 'admin_init', array( $this,'export_file' ) );
 
-    add_submenu_page(
-        'booked-appointments',
-        'Export',
-        'Export',
-        'manage_options',
-        'export',
-        'export'
-    );
+            add_action( 'admin_init', array( $this,'addonsms_register_settings' ) );
 
-    add_submenu_page(
-        'booked-appointments',
-        'SMS Notifications',
-        'SMS Notifications',
-        'manage_options',
-        'sms-notifications',
-        'sms_notifications'
-    );
+        }
+
+        //Enqueue scripts
+        public function add_plugin_scripts() {
+            wp_enqueue_style( 'css-style', plugin_dir_url( __FILE__ ) .'assets/css/css.css' );
+        
+            wp_enqueue_script( 'script', plugin_dir_url( __FILE__ ) .'assets/js/js.js' );
+
+            wp_enqueue_script('jquery-ui-datepicker');
+            
+            wp_enqueue_style('jquery-style', 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/smoothness/jquery-ui.css');
+
+        }
+
+        //Add admin menu
+        public function booked_addon_topmenu() {
+
+            add_submenu_page(
+                'booked-appointments',
+                'All Appointments',
+                'All Appointments',
+                'manage_options',
+                'all-appointments',
+                array($this, 'all_appointments' )
+            );
+        
+            add_submenu_page(
+                'booked-appointments',
+                'Export',
+                'Export',
+                'manage_options',
+                'export',
+                array( $this, 'export' )
+            );
+        
+            add_submenu_page(
+                'booked-appointments',
+                'SMS Notifications',
+                'SMS Notifications',
+                'manage_options',
+                'sms-notifications',
+                array( $this, 'sms_notifications')
+            );
+        }
+
+        //Export all appointments
+        public function export_file(){
+        if (isset($_POST['booked_addon_csv']) || isset($_POST['from_date']) && isset($_POST['to_date'])):
+            include('includes/addon-export-csv.php');
+        endif;
+        }
+
+        public function addonsms_register_settings() {
+            $sms_enable = isset($_POST['sms_control']) ? $_POST['sms_control'] : "";
+            $application_token = isset($_POST['application_id']) ? $_POST['application_id'] : "";
+            $auth = isset($_POST['application_token']) ? $_POST['application_token'] : "";
+            
+            add_option('sms_control',$sms_enable);
+            add_option('application_id',$application_token);
+            add_option('application_token',$auth);
+        
+            register_setting( 'sms_options_group', 'sms_control', 'myplugin_callback' );
+            register_setting( 'sms_options_group', 'application_id', 'myplugin_callback' );
+            register_setting( 'sms_options_group', 'application_token', 'myplugin_callback' );
+        
+         }
+
+         
+        public function all_appointments(){
+            require plugin_dir_path(__FILE__) . 'admin/view-appointments.php';
+        }
+
+        public function export(){
+            require plugin_dir_path(__FILE__) . 'admin/export.php';
+        }
+
+        public function sms_notifications(){
+            require plugin_dir_path(__FILE__) . 'admin/sms-notifications.php';
+        }
+
+    }
+
 }
 
-function all_appointments(){
-    require plugin_dir_path(__FILE__) . 'admin/view-appointments.php';
-}
+$booked_addon = new booked_addon_extension();
 
-function export(){
-    require plugin_dir_path(__FILE__) . 'admin/export.php';
-}
 
-function sms_notifications(){
-    require plugin_dir_path(__FILE__) . 'admin/sms-notifications.php';
-}
 
-//Export all appointments
-add_action( 'admin_init','export_file');
 
-function export_file(){
-if (isset($_POST['booked_addon_csv']) || isset($_POST['from_date']) && isset($_POST['to_date'])):
-    include('includes/addon-export-csv.php');
-endif;
-}
+
+
+
+
 
 // // Require booked addon SMS functions
 // add_action( 'admin_init','sms_file');
@@ -107,19 +138,6 @@ endif;
 // }
 
 
-add_action( 'admin_init', 'addonsms_register_settings' );
 
-function addonsms_register_settings() {
-    $sms_enable = isset($_POST['sms_control']) ? $_POST['sms_control'] : "";
-    $application_token = isset($_POST['application_id']) ? $_POST['application_id'] : "";
-    $auth = isset($_POST['application_token']) ? $_POST['application_token'] : "";
-    
-    add_option('sms_control',$sms_enable);
-    add_option('application_id',$application_token);
-    add_option('application_token',$auth);
 
-    register_setting( 'sms_options_group', 'sms_control', 'myplugin_callback' );
-    register_setting( 'sms_options_group', 'application_id', 'myplugin_callback' );
-    register_setting( 'sms_options_group', 'application_token', 'myplugin_callback' );
 
- }

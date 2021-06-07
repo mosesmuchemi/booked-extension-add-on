@@ -114,7 +114,7 @@ if (isset($_POST['from_date']) && isset($_POST['to_date'])):
         )
      );
 
-     if ( isset( $_POST['calendar_id'] ) && $_POST['calendar_id'] =='all' ):
+     if ( isset( $_POST['calendar_id'] ) && $_POST['calendar_id'] =='all' || empty( $_POST['calendar_id'] ) ):
         $tax_query = array();
 
     else:
