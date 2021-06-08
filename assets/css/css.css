@@ -46,7 +46,7 @@
 }
 
 .apt-panel-head {
-  padding: 20px 0;
+  padding: 20px 30px;
   background-color: #0073aa;
   color: white;
 }
@@ -55,8 +55,11 @@
   font-size: 28px;
   color: white;
 }
-.apt-panel-body {
-  margin: 5px;
+.apt-panel-body:not(.apt-list) {
+  margin: 50px;
+}
+.apt-panel-body.apt-list {
+  margin: 10px;
 }
 .apt-export-btn {
   cursor: pointer;
@@ -89,9 +92,6 @@
   width: 30em;
 }
 
-.export-container {
-  margin: 40px;
-}
 .export-container select {
   width: 180px;
 }

@@ -3,7 +3,7 @@
     <div class="apt-panel-head">
         <h3>All Appointments</h3>
     </div>
-    <div class="apt-panel-body">
+    <div class="apt-panel-body apt-list">
     
       <?php 
 

@@ -16,9 +16,11 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly.
 if ( ! in_array( 'booked/booked.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) 
 return;
 
+define( 'BOOKED_ADDON_URL', plugin_dir_url( __FILE__ ) );
+define( 'BOOKED_ADDON_DIR', plugin_dir_path( __FILE__ ) );
+
 //Require booked plugin main file
-require_once plugin_dir_path(__FILE__) .'../booked/booked.php';
-require_once plugin_dir_path(__FILE__) .'includes/sms-functions.php';
+require_once BOOKED_ADDON_DIR .'../booked/booked.php';
 
 
 if(!class_exists('booked_addon_extension')) {
@@ -33,14 +35,17 @@ if(!class_exists('booked_addon_extension')) {
             add_action( 'admin_init', array( $this,'export_file' ) );
 
             add_action( 'admin_init', array( $this,'addonsms_register_settings' ) );
+            
+            add_action( 'admin_init', array( $this, 'sms_file' ) );
 
         }
 
+
         //Enqueue scripts
         public function add_plugin_scripts() {
-            wp_enqueue_style( 'css-style', plugin_dir_url( __FILE__ ) .'assets/css/css.css' );
+            wp_enqueue_style( 'css-style', BOOKED_ADDON_URL .'assets/css/css.css' );
         
-            wp_enqueue_script( 'script', plugin_dir_url( __FILE__ ) .'assets/js/js.js' );
+            wp_enqueue_script( 'script', BOOKED_ADDON_URL .'assets/js/js.js' );
 
             wp_enqueue_script('jquery-ui-datepicker');
             
@@ -103,15 +108,22 @@ if(!class_exists('booked_addon_extension')) {
 
          
         public function all_appointments(){
-            require plugin_dir_path(__FILE__) . 'admin/view-appointments.php';
+            require BOOKED_ADDON_DIR . 'admin/view-appointments.php';
         }
 
         public function export(){
-            require plugin_dir_path(__FILE__) . 'admin/export.php';
+            require BOOKED_ADDON_DIR . 'admin/export.php';
         }
 
         public function sms_notifications(){
-            require plugin_dir_path(__FILE__) . 'admin/sms-notifications.php';
+            require BOOKED_ADDON_DIR . 'admin/sms-notifications.php';
+        }
+
+        //Require booked addon SMS functions
+        public function sms_file(){
+            if ( isset( $_POST['application_id'] ) && isset( $_POST['application_token'] ) ):
+                include('includes/sms-functions.php');
+            endif;
         }
 
     }
@@ -123,19 +135,6 @@ $booked_addon = new booked_addon_extension();
 
 
 
-
-
-
-
-
-// // Require booked addon SMS functions
-// add_action( 'admin_init','sms_file');
-
-// function sms_file(){
-// if ( isset( $_POST['application_id'] ) && isset( $_POST['application_token'] ) ):
-//     include('includes/sms-functions.php');
-// endif;
-// }
 
 
 
